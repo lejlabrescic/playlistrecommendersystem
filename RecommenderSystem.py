@@ -1,13 +1,18 @@
 import pandas as pd
-import pandas as pd
-import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.feature_extraction.text import CountVectorizer
 from textblob import TextBlob
+import spotipy
 import re
 from spotipy.oauth2 import SpotifyClientCredentials
+from dotenv import load_dotenv
+import os
 
+# Load variables from the .env file
+load_dotenv()
+client_id = os.getenv("SPOTIFY_CLIENT_ID")
+client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
 df = pd.read_csv("Spotify_Youtube.csv")
 
 df.isnull().sum()
@@ -20,8 +25,6 @@ df.reset_index(drop=True, inplace=True)
 df['song_uri'] = df['Uri'].str.split(':').str[-1]
 
 
-client_id = "19dd57734b2c40fe830e6a8ec94ec5f0"
-client_secret = "3636d4a258174f2eaf2f7e4424c8e08d"
 client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
@@ -67,9 +70,7 @@ def get_track_genre_for_df(df):
 df['track_genre'] = get_track_genre_for_df(df)
 
 #print(df)
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
-sid = SentimentIntensityAnalyzer()
-df['sentiment_score'] = df['song_lyrics'].apply(lambda x: sid.polarity_scores(x)['compound'])
+
 
 
 from sklearn.cluster import KMeans, DBSCAN
@@ -131,6 +132,5 @@ def recommend_songs(dataset, song_name, num_recommendations):
 song_recommendations = recommend_songs(df, 'JUST DANCE HARDSTYLE', 5)
 print("Recommended Songs:")
 print(np.array(song_recommendations))
-#print(df)
 
 
