@@ -1,8 +1,8 @@
 from textblob import TextBlob
-def getSubjectivity(text):
-  return TextBlob(text).sentiment.subjectivity
-def getPolarity(text):
-  return TextBlob(text).sentiment.polarity
+def getSubjectivity(lyrics):
+  return TextBlob(lyrics).sentiment.subjectivity
+def getPolarity(lyrics):
+  return TextBlob(lyrics).sentiment.polarity
 def getAnalysis(score, task="polarity"):
   if task == "subjectivity":
     if score < 1/3:
@@ -19,7 +19,7 @@ def getAnalysis(score, task="polarity"):
     else:
       return 'Positive'
 
-def sentiment_analysis(df, text_col):
-  df['subjectivity'] = df[text_col].apply(getSubjectivity).apply(lambda x: getAnalysis(x,"subjectivity"))
-  df['polarity'] = df[text_col].apply(getPolarity).apply(getAnalysis)
+def sentiment_analysis(df, lyrics):
+  df['subjectivity'] = df[lyrics].apply(getSubjectivity).apply(lambda x: getAnalysis(x,"subjectivity"))
+  df['polarity'] = df[lyrics].apply(getPolarity).apply(getAnalysis)
   return df['polarity'], df['subjectivity']
