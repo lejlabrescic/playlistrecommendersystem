@@ -1,11 +1,3 @@
-import pandas as pd
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.feature_extraction.text import CountVectorizer
-from textblob import TextBlob
-from sklearn.cluster import KMeans, DBSCAN
-from statistics import median
-import numpy as np
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from dotenv import load_dotenv

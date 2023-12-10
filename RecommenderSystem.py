@@ -3,7 +3,6 @@ import numpy as np
 import extractTrackLyrics
 import SentimentAnalysis as sa
 import Clustering as c
-import extractTrackUri as etu
 import extractTrackGenre as etg
 
 df = pd.read_csv("Spotify_Youtube.csv")
