@@ -1,16 +1,10 @@
-import pandas as pd
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.feature_extraction.text import CountVectorizer
-from textblob import TextBlob
 from sklearn.cluster import KMeans, DBSCAN
 from statistics import median
 import numpy as np
-import spotipy
-import re
+
 
 def kmeans_clustering(df):
-    selected_columns = ['track_genre', 'Energy', 'sentiment_score', 'Likes', 'Stream']
+    selected_columns = ['track_genre', 'Energy', 'polarity', 'Likes', 'Stream', 'subjectivity']
     X = df[selected_columns].values
 
     kmeans = KMeans(n_clusters=4, init='k-means++', max_iter=300, n_init=10, random_state=0)
@@ -20,7 +14,7 @@ def kmeans_clustering(df):
 
 
 def dbscan_clustering(df):
-    selected_columns = ['track_genre', 'Energy', 'sentiment_score', 'Likes', 'Stream']
+    selected_columns = ['track_genre', 'Energy', 'polarity', 'Likes', 'Stream', 'subjectivity']
     X = df[selected_columns].values
 
     dbscan = DBSCAN(eps=0.5, min_samples=5)
@@ -34,7 +28,7 @@ def recommend_songs(dataset, song_name, num_recommendations):
 
     input_song = data[data['Track'] == song_name].iloc[0]
 
-    selected_columns = ['track_genre', 'Energy', 'sentiment_score', 'Likes', 'Stream']
+    selected_columns = ['track_genre', 'Energy', 'polarity', 'Likes', 'Stream', 'subjectivity']
     input_features = np.array(input_song[selected_columns]).reshape(1, -1)
 
     kmeans_model = KMeans(n_clusters=4, init='k-means++', max_iter=300, n_init=10, random_state=0)
@@ -49,10 +43,10 @@ def recommend_songs(dataset, song_name, num_recommendations):
 
     consensus_cluster_data = data[data['KMeans_Cluster'] == consensus_cluster]
 
-    sorted_consensus_cluster_data = consensus_cluster_data.sort_values(by='Likes', ascending=False)
+    sorted_consensus_cluster_data = consensus_cluster_data.sort_values(by='subjectivity', ascending=False)
 
     sorted_consensus_cluster_data = sorted_consensus_cluster_data[sorted_consensus_cluster_data['Track'] != song_name]
 
     recommended_songs = sorted_consensus_cluster_data.head(num_recommendations)
 
-    return recommended_songs[['Artist', 'Track']]
+    return recommended_songs[['Artist', 'Track']];

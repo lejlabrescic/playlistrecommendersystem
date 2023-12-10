@@ -1,18 +1,6 @@
 import pandas as pd
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.feature_extraction.text import CountVectorizer
-from textblob import TextBlob
-from sklearn.cluster import KMeans, DBSCAN
-from statistics import median
 import numpy as np
-import spotipy
-import re
-from spotipy.oauth2 import SpotifyClientCredentials
-from dotenv import load_dotenv
-import os
 import extractTrackLyrics
-
 import SentimentAnalysis as sa
 import Clustering as c
 import extractTrackUri as etu
@@ -31,7 +19,7 @@ df.reset_index(drop=True, inplace=True)
 df['song_uri'] = df['Uri'].str.split(':').str[-1]
 df['song_lyrics'] = df.apply(lambda row: extractTrackLyrics.fetch_lyrics(row['Track'], row['Artist']), axis=1)
 df['track_genre'] = etg.get_track_genre_for_df(df)
-df['sentiment_score'] = sa.sentimentAnalysis(df)
+df['polarity'], df['subjectivity'] = sa.sentiment_analysis(df, 'song_lyrics')
 
 song_recommendations = c.recommend_songs(df, 'JUST DANCE HARDSTYLE', 5)
 print("Recommended Songs:")
