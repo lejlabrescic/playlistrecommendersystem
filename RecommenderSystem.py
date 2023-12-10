@@ -11,6 +11,7 @@ import re
 from spotipy.oauth2 import SpotifyClientCredentials
 from dotenv import load_dotenv
 import os
+import extractTrackLyrics
 
 import SentimentAnalysis as sa
 import Clustering as c
@@ -28,7 +29,7 @@ df.drop(columns=["Unnamed: 0"], inplace=True)
 df.reset_index(drop=True, inplace=True)
 
 df['song_uri'] = df['Uri'].str.split(':').str[-1]
-df['song_lyrics'] = etu.extract_song_lyrics(df['Description'])
+df['song_lyrics'] = df.apply(lambda row: extractTrackLyrics.fetch_lyrics(row['Track'], row['Artist']), axis=1)
 df['track_genre'] = etg.get_track_genre_for_df(df)
 df['sentiment_score'] = sa.sentimentAnalysis(df)
 
