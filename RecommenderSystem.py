@@ -26,19 +26,11 @@ df.isnull().sum()
 
 df.drop(columns=["Unnamed: 0"], inplace=True)
 df.reset_index(drop=True, inplace=True)
+
 df['song_uri'] = df['Uri'].str.split(':').str[-1]
-
-
-
-
-
-
 df['song_lyrics'] = etu.extract_song_lyrics(df['Description'])
-
-
 df['track_genre'] = etg.get_track_genre_for_df(df)
 df['sentiment_score'] = sa.sentimentAnalysis(df)
-
 
 song_recommendations = c.recommend_songs(df, 'JUST DANCE HARDSTYLE', 5)
 print("Recommended Songs:")
