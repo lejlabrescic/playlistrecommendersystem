@@ -1,6 +1,8 @@
 import lyricsgenius
 from dotenv import load_dotenv
 import os
+
+
 def fetch_lyrics(track_name, artist):
     load_dotenv()
     genius_api_token = os.getenv("GENIUS_API_TOKEN")
@@ -12,5 +14,5 @@ def fetch_lyrics(track_name, artist):
         else:
             return None
     except Exception as e:
-        print(f"An error occurred: {e}")
+        print("An error occurred while fetching lyrics: ", e)
         return None

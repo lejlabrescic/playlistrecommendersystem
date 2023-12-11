@@ -2,6 +2,8 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from dotenv import load_dotenv
 import os
+
+
 def get_track_genre_for_df(df):
     load_dotenv()
     client_id = os.getenv("SPOTIFY_CLIENT_ID")
@@ -28,4 +30,5 @@ def get_track_genre_for_df(df):
             print(f"Error fetching genres for track {track_uri}: {e}")
             genres_list.append(None)
 
+    genres_list = df['song_uri'].apply(get_track_genre_for_df)
     return genres_list
