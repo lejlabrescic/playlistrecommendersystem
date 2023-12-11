@@ -16,11 +16,11 @@ df.drop(columns=["Unnamed: 0"], inplace=True)
 df.reset_index(drop=True, inplace=True)
 
 df['song_uri'] = df['Uri'].str.split(':').str[-1]
-print(df)
+# print(df)
 #df['lyrics'] = df.head(4).apply(lambda row: fetch_lyrics(row['Track'], row['Artist']), axis=1)
 #df['genres'] = df['song_uri'].apply(etg.get_track_genre_for_df)
 
-#df['polarity'], df['subjectivity'] = sa.sentiment_analysis(df, 'song_lyrics')
+# df['polarity'], df['subjectivity'] = sa.sentiment_analysis(df, 'song_lyrics')
 song_recommendations = c.recommend_songs(df, 'JUST DANCE HARDSTYLE', 5)
 print("Recommended Songs:")
 print(np.array(song_recommendations))

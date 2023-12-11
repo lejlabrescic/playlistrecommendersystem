@@ -4,7 +4,7 @@ import numpy as np
 
 
 def kmeans_clustering(df):
-    selected_columns = ['track_genre', 'Energy', 'polarity', 'Likes', 'Stream', 'subjectivity']
+    selected_columns = ['Liveness', 'Energy', 'Danceability', 'Likes', 'Stream']
     X = df[selected_columns].values
 
     kmeans = KMeans(n_clusters=4, init='k-means++', max_iter=300, n_init=10, random_state=0)
@@ -14,7 +14,7 @@ def kmeans_clustering(df):
 
 
 def dbscan_clustering(df):
-    selected_columns = ['track_genre', 'Energy', 'polarity', 'Likes', 'Stream', 'subjectivity']
+    selected_columns = ['Liveness', 'Energy', 'Danceability', 'Likes', 'Stream']
     X = df[selected_columns].values
 
     dbscan = DBSCAN(eps=0.5, min_samples=5)
@@ -28,7 +28,7 @@ def recommend_songs(dataset, song_name, num_recommendations):
 
     input_song = data[data['Track'] == song_name].iloc[0]
 
-    selected_columns = ['track_genre', 'Energy', 'polarity', 'Likes', 'Stream', 'subjectivity']
+    selected_columns = ['Liveness', 'Energy', 'Danceability', 'Likes', 'Stream']
     input_features = np.array(input_song[selected_columns]).reshape(1, -1)
 
     kmeans_model = KMeans(n_clusters=4, init='k-means++', max_iter=300, n_init=10, random_state=0)
@@ -43,7 +43,7 @@ def recommend_songs(dataset, song_name, num_recommendations):
 
     consensus_cluster_data = data[data['KMeans_Cluster'] == consensus_cluster]
 
-    sorted_consensus_cluster_data = consensus_cluster_data.sort_values(by='subjectivity', ascending=False)
+    sorted_consensus_cluster_data = consensus_cluster_data.sort_values(by='Likes', ascending=False)
 
     sorted_consensus_cluster_data = sorted_consensus_cluster_data[sorted_consensus_cluster_data['Track'] != song_name]
 
