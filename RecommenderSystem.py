@@ -35,39 +35,40 @@ train_data, kmeans_model = c.kmeans_clustering(train_data)
 train_data, dbscan_model = c.dbscan_clustering(train_data)
 
 song_recommendations = c.recommend_songs(df, 'JUST DANCE HARDSTYLE', 5)
-# print("Recommended Songs:")
-# print(np.array(song_recommendations))
-# print(song_recommendations.columns)
+print("Recommended Songs:")
+print(np.array(song_recommendations))
+print(song_recommendations.columns)
 
+#not forking for some reason 
 # ground_truth = df[df['Track'].isin(song_recommendations['Track'])]['Likes'].apply(lambda x: 1 if x > 50 else 0)
+#not forking for some reason 
+# accuracy = accuracy_score(ground_truth, song_recommendations['Likes'] > 50) 
 
-# accuracy = accuracy_score(ground_truth, song_recommendations['Likes'] > 50)
+recommended_songs_df = df[df['Track'].isin(song_recommendations['Track'])][['Track', 'Likes']]
+recommended_songs_df['Liked'] = recommended_songs_df['Likes'] > 50
+accuracy = recommended_songs_df['Liked'].mean()
 
-# recommended_songs_df = df[df['Track'].isin(song_recommendations['Track'])][['Track', 'Likes']]
-# recommended_songs_df['Liked'] = recommended_songs_df['Likes'] > 50
-# accuracy = recommended_songs_df['Liked'].mean()
+print(f"Accuracy: {accuracy}")
 
-# print(f"Accuracy: {accuracy}")
+most_streamed=df.groupby("Track")["Stream"].mean()
+print(most_streamed)
 
-# most_streamed=df.groupby("Track")["Stream"].mean()
-# print(most_streamed)
+most_streamed1=most_streamed.nlargest(5)
+print(most_streamed1)
 
-# most_streamed1=most_streamed.nlargest(5)
-# print(most_streamed1)
-
-# fig = px.bar(most_streamed1,x=most_streamed1,title="5 Most Streamed Songs")
-# fig.show()
-# most_streamed_albumtype=df.groupby(["Album_type","Track"])["Stream"].mean().sort_values(ascending=False)
-# print(most_streamed_albumtype)
-# pd.concat([most_streamed_albumtype.unstack(0).nlargest(5,['album']) ,most_streamed_albumtype.unstack(0).nlargest(5,['single'])]).plot.bar()
-# plt.show()
+fig = px.bar(most_streamed1,x=most_streamed1,title="5 Most Streamed Songs")
+fig.show()
+most_streamed_albumtype=df.groupby(["Album_type","Track"])["Stream"].mean().sort_values(ascending=False)
+print(most_streamed_albumtype)
+pd.concat([most_streamed_albumtype.unstack(0).nlargest(5,['album']) ,most_streamed_albumtype.unstack(0).nlargest(5,['single'])]).plot.bar()
+plt.show()
 
 most_played_artist_spotify=df.groupby("Artist")["Stream"].mean().sort_values(ascending=False)
 print(most_played_artist_spotify)
 most_played_artist_spotify1=most_played_artist_spotify.nlargest(5)
 
-# fig1=px.bar(most_played_artist_spotify1,title="Most played artist on spotify")
-# fig1.show()
+fig1=px.bar(most_played_artist_spotify1,title="Most played artist on spotify")
+fig1.show()
 
 f=df.groupby("Artist")[["Stream","Views"]].mean()
 print(f)
