@@ -2,7 +2,7 @@ from sklearn.cluster import KMeans, DBSCAN
 from statistics import median
 import numpy as np
 
-
+from sklearn.metrics import silhouette_score
 def kmeans_clustering(df):
     selected_columns = ['Liveness', 'Energy', 'Danceability', 'Likes', 'Stream']
     X = df[selected_columns].values
@@ -50,3 +50,4 @@ def recommend_songs(dataset, song_name, num_recommendations):
     recommended_songs = sorted_consensus_cluster_data.head(num_recommendations)
 
     return recommended_songs[['Artist', 'Track']];
+
