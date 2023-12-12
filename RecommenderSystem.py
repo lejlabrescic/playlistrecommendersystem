@@ -12,6 +12,13 @@ import plotly.express as px
 from sklearn.metrics import silhouette_score
 from sklearn.metrics import precision_score, recall_score, f1_score
 import seaborn as sns
+from sklearn.model_selection import cross_val_score
+from sklearn.cluster import KMeans
+from sklearn.metrics import make_scorer, mean_squared_error
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+
 df = pd.read_csv("Spotify_Youtube.csv")
 
 df.isnull().sum()
@@ -42,9 +49,9 @@ song_recommendations = c.recommend_songs(df, 'JUST DANCE HARDSTYLE', 5)
 # print(np.array(song_recommendations))
 # print(song_recommendations.columns)
 
-#not forking for some reason 
+#not working for some reason 
 # ground_truth = df[df['Track'].isin(song_recommendations['Track'])]['Likes'].apply(lambda x: 1 if x > 50 else 0)
-#not forking for some reason 
+#not working for some reason 
 # accuracy = accuracy_score(ground_truth, song_recommendations['Likes'] > 50) 
 
 recommended_songs_df = df[df['Track'].isin(song_recommendations['Track'])][['Track', 'Likes']]
@@ -101,3 +108,14 @@ accuracy = recommended_songs_df['Liked'].mean()
 # Visualizing recommender results
 # fig = px.bar(recommended_songs_df, x='Track', y='Likes', color='Liked', title='Recommender Results')
 # fig.show()
+ 
+
+#RMSE 
+X = df[selected_columns]  
+y = df['Likes']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+regression_model = LinearRegression()
+regression_model.fit(X_train, y_train)
+y_pred = regression_model.predict(X_test)
+rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+print("Root Mean Squared Error (RMSE):", rmse)
